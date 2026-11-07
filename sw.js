@@ -1,0 +1,4 @@
+var C="wishlist-v3",F=["./","index.html","manifest.webmanifest","icon-192.png","icon-512.png","icon-maskable-512.png","apple-touch-icon.png","favicon-32.png"];
+self.addEventListener("install",function(e){e.waitUntil(caches.open(C).then(function(c){return c.addAll(F)}).then(function(){return self.skipWaiting()}))});
+self.addEventListener("activate",function(e){e.waitUntil(caches.keys().then(function(k){return Promise.all(k.filter(function(n){return n!==C}).map(function(n){return caches.delete(n)}))}).then(function(){return self.clients.claim()}))});
+self.addEventListener("fetch",function(e){var q=e.request;if(q.method!=="GET"||new URL(q.url).origin!==location.origin)return;e.respondWith(caches.match(q,{ignoreSearch:true}).then(function(r){var n=fetch(q).then(function(s){if(s&&s.ok){var c2=s.clone();caches.open(C).then(function(c){c.put(q,c2)})}return s}).catch(function(){return r});return r||n}))});
